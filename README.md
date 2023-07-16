@@ -41,15 +41,6 @@ Forge your rainbow team!
 - Integrated breeding system
 - Integrated wild encounter system
 
-<br>
-<a href="https://micktk.github.io/Pokemon-Essentials-Plugins/index.html#/home?url=https://github.com/MickTK/Pokemon-Essentials-Plugins/tree/main/
-Pokemon%20Color%20Variants
-&fileName=Pokemon%20Color%20Variants
-&rootDirectory=true"><p align="center">
-<img src="https://custom-icon-badges.herokuapp.com/badge/-Download-red?style=for-the-badge&logo=download&logoColor=white">
-</p></a>
-<br>
-
 Pokemon Color Variants adds a function that can shift the hue color of a pokémon's sprite to make it looks more unique.
 The plugin uses the hue attribute from RGSS3's Bitmap and Graphic classes to work.
 
