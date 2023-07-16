@@ -134,4 +134,4 @@ event.pages[0].move_frequency = VisibleEncounterSettings::DEFAULT_MOVEMENT[1]
 
 <br>
 
-[Download instructions](https://github.com/MickTK/Pokemon-Essentials-Plugins/blob/main/Download%20instructions.md)
+Installation: [instructions](https://github.com/MickTK/Pokemon-Essentials-Plugins/wiki/Instructions).
