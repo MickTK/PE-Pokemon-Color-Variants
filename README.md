@@ -1,27 +1,16 @@
-![Essentials](https://badgen.net/badge/Essentials/20.1/orange)
-![Version](https://badgen.net/badge/Version/1.1.0/cyan)
+![Essentials](https://badgen.net/badge/Essentials/21.1/orange)
+![Version](https://badgen.net/badge/Version/1.2.0/cyan)
 
 <p align="center">
-<img width="200px" src="https://user-images.githubusercontent.com/63038410/189546697-067374fd-5a8d-43d5-941b-cb1f338c09a0.png">
+<img width="200px" src="https://user-images.githubusercontent.com/63038410/277101961-6f414f38-9219-4b06-b1b0-0ccf45836f1e.png">
 </p>
 
-<h1 align="center">Pokemon Color Variants</h1>
+<h1 align="center">Pokémon Color Variants</h1>
+
 
 <p align="center">
 Forge your rainbow team!
 </p>
-
-<div align="center">
-  <details>
-  <summary>Preview</summary>
-    <img src="https://user-images.githubusercontent.com/63038410/189638185-6cb01896-b0bc-49dd-a800-5cd10fa734a2.gif">
-    <p>Wild encounter</p><br>
-    <img src="https://user-images.githubusercontent.com/63038410/189638258-8d08e41d-4ee8-496e-8ed2-9b45b9e6a1b1.gif">
-    <p>A walk with Scyther</p><br>
-    <img src="https://user-images.githubusercontent.com/63038410/189638289-beab8591-be64-4857-aa75-5bea1396aec7.gif">
-    <p>Pc showcase</p>
-  </details>
-</div>
 
 <div align="center">
   <details>
@@ -36,37 +25,31 @@ Forge your rainbow team!
 </div>
 
 ## Overview
-- More than 700 color variants for each pokémon!
-- Highly customizable
-- Integrated breeding system
-- Integrated wild encounter system
 
-Pokemon Color Variants adds a function that can shift the hue color of a pokémon's sprite to make it looks more unique.
-The plugin uses the hue attribute from RGSS3's Bitmap and Graphic classes to work.
+![showcase](https://user-images.githubusercontent.com/63038410/277104962-7e978829-7cd2-48f7-a697-6f43810545f7.gif)
 
-A **debug menu** can be used from the party menu: `Debug > Cosmetic info... > Set hue color`.
+- More than 700 variants for each pokémon
+- Encount the pokémon variants in the wild or obtain them through breeding
+- Bring more color to trainers team
+- Create unique and wonderful variants to reward the player
+- Customize the plugin to fit your needs
 
-Check `settings.rb` for the configurations.
+### Wild encounters and breeding
 
-## Instructions
+![encounter](https://user-images.githubusercontent.com/63038410/277105130-b1a9e2a3-4e88-4c8f-bd53-eeb09a4d6c71.gif)
 
-### Random or specific hue(s)
-Pokémons can have random or specific hues.
-This can be defined in the setting `SPECIFIC_HUE_ONLY`.
-If it is `true` you have to add the pokémon id and the hue(s) to `POKEMON_HUE` map as shown in the script (undefined pokémons will have only default color).
+![breeding](https://user-images.githubusercontent.com/63038410/277105137-d26fd2e4-7792-4e8e-a10a-fbfdfb14e362.gif)
 
-### Breeding
-Pokémons can hereditate parents color from breeding.
-It requires `SPECIFIC_HUE_ONLY` to be setted on `false`.
+Pokémon's variants can be found in the wild and from breeding with their own customizable odds.
 
-You can define the behaviour through `HEREDITY_TYPE`:
-- `"single"`: hereditate the color of one parent.
-- `"average"`: hereditate the average color of the parents (for instance, if its parents have 100 and 300 the newborn will have 200).
+### Trainer
 
-This mechanic can be disabled by setting `HEREDITY_TYPE` to `nil`.
+![trainer](https://user-images.githubusercontent.com/63038410/277105181-5680dbd3-3a96-4407-8f15-b56ccbb7a834.gif)
 
-### Trainer's pokemon
-The hue of a trainer's pokemon can be specified in the PBS file `trainers.txt` by adding `Hue = <value>` at the end of the pokemon parameters as shown in the example.
+The variants for the trainer's pokémons can be specified in the PBS file `trainers.txt` by adding the `Hue` tag as parameter.
+
+For instance:
+
 ```
 Pokemon = ONIX,10
     Gender = male
@@ -76,62 +59,36 @@ Pokemon = ONIX,10
     Hue = 150
 ```
 
-<br>
+### Editor
 
-## Compatibilities
-Some external plugins require some adds to work.
+![editor](https://user-images.githubusercontent.com/63038410/277105241-c0ac83b4-c0ee-4942-9720-c8df3598e7b0.gif)
 
-Check the `meta.txt` for the compatible plugins list.
-
-Note: Deluxe animations (like mega evolution and dynamax) don't work with this plugin.
-
-### Following Pokemon EX setup
-
-<details>
-<summary>Instructions</summary>
-
-Setup Following Pokemon EX plugin:
-1. Open the file `Following Pokemon EX > Main Module > Event_Sprite Commands.rb` from the plugin folder and go to the `change_sprite` method.
-2. Copy and paste `PokemonColorVariants.apply(pkmn,FollowingPkmn.get_event,FollowingPkmn.get_data) if PluginManager.installed?("Pokemon Color Variants")` in the script as shown in the example below.
-```ruby
-  if FollowingPkmn.get_event&.move_route_forcing
-    hue = pkmn.respond_to?(:superHue) && pkmn.superShiny? ? pkmn.superHue : 0
-    FollowingPkmn.get_event&.character_hue  = hue
-    FollowingPkmn.get_data&.character_hue   = hue
-  end
-  # Pokemon color variant
-  PokemonColorVariants.apply(pkmn,FollowingPkmn.get_event,FollowingPkmn.get_data) if PluginManager.installed?("Pokemon Color Variants")
-end
-```
-
-</details>
-
-### Visible Overworld Wild Encounters setup
-
-<details>
-<summary>Instructions</summary>
-
-Setup Visible Overworld Wild Encounters plugin:
-1. Open the file `001_visible overworld wild encounters script.rb` from the plugin folder and go to the `Game_Map > spawnPokeEvent` method.
-2. Copy and paste `PokemonColorVariants.apply(pokemon,event) if PluginManager.installed?("Pokemon Color Variants")` in the script as shown in the example below.
-```ruby
-#--- movement of the event --------------------------------
-# Pokemon color variant
-PokemonColorVariants.apply(pokemon,event) if PluginManager.installed?("Pokemon Color Variants")
-event.pages[0].move_speed = VisibleEncounterSettings::DEFAULT_MOVEMENT[0]
-event.pages[0].move_frequency = VisibleEncounterSettings::DEFAULT_MOVEMENT[1]
-```
-
-</details>
+The editor can modify the hue of a pokémon showing the current color.
 
 <br>
 
 ## Informations
 | Information | Description |
 |:-|:-|
-| `(Pokemon) pokemon.hue = 180` | Get/set the pokémon hue. |
-| `(Pokemon) pokemon.hue?` | Return `true` if the pokémon has an hue value, `false` otherwise. |
+| `pokemon.hue = 180` | Get/set the pokémon's hue. |
+|`pokemon.set_random_hue()`|Set a random hue to the pokémon.|
+| `pokemon.hue?` | Return `true` if the pokémon has an hue value, `false` otherwise. |
+|`pokemon.applicable_hue?`| Check if the pokémon's hue can be applied.|
+|`pbHueEditor(pokemon, can_be_saved = true)`| Show the hue editor for the given pokémon.|
+|`bitmap.hue = 10`|Set the bitmap's hue from to the given value (from 0).|
+
+### Configurations
+The configuration files can be found in the `config` folder.
+
+Make sure to create a backup of the previous files in order to update the plugin without lose your configurations.
 
 <br>
 
-Installation: [instructions](https://github.com/MickTK/Pokemon-Essentials-Plugins/wiki/Instructions).
+<hr>
+
+> Pokémon Color Variants is a plugin for *Pokémon Essentials* that brings more colors to the pokémons.
+It is achieved by shifting the hue color of the sprites to make them appear different and unique.
+It is all done by using the *hue_change* method that is implemented in the class *Bitmap* of *RGSS3*.
+
+<a href="https://github.com/MickTK/PE-Pokemon-Color-Variants"><img width="25px" src="https://user-images.githubusercontent.com/63038410/277105894-4c82662e-5d30-4d2f-b2bc-4a73fc8a1837.png"></a>
+<a href="https://reliccastle.com/resources/1035/"><img width="25px" src="https://user-images.githubusercontent.com/63038410/277105886-60e410d8-9a47-4d63-b1c0-5d67b545b7cb.png"></a>

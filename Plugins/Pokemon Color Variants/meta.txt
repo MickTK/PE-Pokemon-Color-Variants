@@ -1,10 +1,5 @@
 Name       = Pokemon Color Variants
-Version    = 1.1.0
-Essentials = 20.1
-Optional   = Essentials Deluxe,1.2.1
-Optional   = Following Pokemon EX,2.2.2
-Optional   = Generation 8 Pack Scripts,1.0.3
-Optional   = ZUD Mechanics,1.1.6
-Optional   = Visible Overworld Wild Encounters,20.0.0.3
-Website    = github.com/MickTK/Pokemon-Essentials-Plugins
+Version    = 1.2.0
+Essentials = 21.1
+Website    = github.com/MickTK/PE-Pokemon-Color-Variants
 Credits    = MickTK
