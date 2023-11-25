@@ -6,21 +6,12 @@
 class Bitmap
 
   attr_reader :hue
-
-  alias pokemon_color_variants_initialize initialize
-  def initialize(*params)
-    self.pokemon_color_variants_initialize(*params)
-    @hue = 0
-  end
-
-  alias pokemon_color_variants_hue_change hue_change
-  def hue_change(hue)
-    @hue += hue
-    self.pokemon_color_variants_hue_change(hue)
-  end
-
+  
   def hue=(hue)
-    self.hue_change(hue - @hue)
+    @hue = 0 if @hue == nil
+    diff = hue - @hue
+    self.hue_change(diff)
+    @hue += diff
   end
 end
 

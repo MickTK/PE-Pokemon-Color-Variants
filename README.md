@@ -1,5 +1,5 @@
 ![Essentials](https://badgen.net/badge/Essentials/21.1/orange)
-![Version](https://badgen.net/badge/Version/1.2.0/cyan)
+![Version](https://badgen.net/badge/Version/1.2.1/cyan)
 
 <p align="center">
 <img width="200px" src="https://user-images.githubusercontent.com/63038410/277101961-6f414f38-9219-4b06-b1b0-0ccf45836f1e.png">
