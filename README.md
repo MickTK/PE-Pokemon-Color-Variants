@@ -91,4 +91,4 @@ It is achieved by shifting the hue color of the sprites to make them appear diff
 It is all done by using the *hue_change* method that is implemented in the class *Bitmap* of *RGSS3*.
 
 <a href="https://github.com/MickTK/PE-Pokemon-Color-Variants"><img width="25px" src="https://user-images.githubusercontent.com/63038410/277105894-4c82662e-5d30-4d2f-b2bc-4a73fc8a1837.png"></a>
-<a href="https://reliccastle.com/resources/1035/"><img width="25px" src="https://user-images.githubusercontent.com/63038410/277105886-60e410d8-9a47-4d63-b1c0-5d67b545b7cb.png"></a>
+<a href="https://eeveeexpo.com/resources/1035/"><img width="25px" src="https://github.com/MickTK/PE-Pokemon-Color-Variants/assets/63038410/4db3344e-b75a-42c5-8ebc-1a5a6a2796dc"></a>
