@@ -1,5 +1,5 @@
 Name       = Pokemon Color Variants
-Version    = 1.2.1
+Version    = 1.3.0
 Essentials = 21.1
 Website    = github.com/MickTK/PE-Pokemon-Color-Variants
 Credits    = MickTK
