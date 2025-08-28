@@ -95,22 +95,22 @@ module PokemonColorVariants
 			@sprites["right_poke_icon"].y = -15
 			@sprites["right_poke_icon"].mirror = true
 			# Hue value
-			@sprites["hue_value"].bitmap.clear
+			@sprites["hue_value"].bitmap.clear()
 			value = sprintf("%d", @pokemon.hue)
 			drawTextEx(@sprites["hue_value"].bitmap,0,0,75,1,value,Color.new(255,255,255),Color.new(0,0,0,0))
 		end
 
 		# Update the animation of the icons
 		def update_animations()
-			@sprites["left_poke_icon"].update
-			@sprites["right_poke_icon"].update
+			@sprites["left_poke_icon"].update()
+			@sprites["right_poke_icon"].update()
 		end
 
 		# Control the scene
 		def controller()
 			loop do
-				Graphics.update
-				Input.update
+				Graphics.update()
+				Input.update()
 				# Increase/decrese the hue value
 				if    Input.repeat?(Input::RIGHT); @pokemon.hue += SMALL_STEP; update()
 				elsif Input.repeat?(Input::LEFT);  @pokemon.hue -= SMALL_STEP; update()

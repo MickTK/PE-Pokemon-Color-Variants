@@ -21,13 +21,15 @@ end
 #==============================================================================
 # Applies the variation on the party's icons
 #------------------------------------------------------------------------------
-class PokemonIconSprite < Sprite
-	alias :pokemon_color_variants_pokemon= :pokemon=
-	def pokemon=(value)
-		self.pokemon_color_variants_pokemon = value
-		# Apply color variation
-		if PokemonColorVariants::APPLY_TO_ICON
-			self.bitmap.palette_change(@pokemon.palette_0, @pokemon.palette_1) if @pokemon.applicable_palette?
+if PokemonColorVariants::APPLY_TO_ICON
+	class PokemonIconSprite < Sprite
+		alias :pokemon_color_variants_pokemon= :pokemon=
+		def pokemon=(value)
+			# Remove the sprite from the cache
+			RPG::Cache.removeKey(GameData::Species.icon_filename_from_pokemon(value))
+			self.pokemon_color_variants_pokemon = value
+			# Apply color variation
+			self.bitmap.palette_change(@pokemon.palette_0, @pokemon.palette_1) if @pokemon.palette? && @pokemon.applicable_palette?
 			self.bitmap.hue = @pokemon.hue if @pokemon.applicable_hue?
 		end
 	end
@@ -38,17 +40,54 @@ end
 #==============================================================================
 # Applies the variation on the pc's icons
 #------------------------------------------------------------------------------
-class PokemonBoxIcon < IconSprite
-	alias :pokemon_color_variants_refresh :refresh
-	def refresh
-		return if !@pokemon
-		pokemon_color_variants_refresh()
-		# Apply color variation
-		if PokemonColorVariants::APPLY_TO_ICON
-			self.bitmap.palette_change(@pokemon.palette_0, @pokemon.palette_1) if @pokemon.applicable_palette?
+if PokemonColorVariants::APPLY_TO_ICON
+	class PokemonBoxIcon < IconSprite
+		alias :pokemon_color_variants_refresh :refresh
+		def refresh
+			return if !@pokemon
+			# Remove the sprite from the cache
+			RPG::Cache.removeKey(GameData::Species.icon_filename_from_pokemon(@pokemon))
+			pokemon_color_variants_refresh()
+			# Apply color variation
+			self.bitmap.palette_change(@pokemon.palette_0, @pokemon.palette_1) if @pokemon.palette? && @pokemon.applicable_palette?
 			self.bitmap.hue = @pokemon.hue if @pokemon.applicable_hue?
 		end
 	end
+end
+
+#==============================================================================
+# Battle Scene
+#==============================================================================
+# Play the shiny animation if the pokémon has a hue
+#------------------------------------------------------------------------------
+if PokemonColorVariants::USE_SHINY_ANIMATION
+  class Battle::Scene
+		# Enemy/wild pokémon animation
+    alias :pokemon_color_variants_pbBattleIntroAnimation :pbBattleIntroAnimation
+    def pbBattleIntroAnimation()
+      pokemon_color_variants_pbBattleIntroAnimation()
+      if @battle.showAnims
+        @battle.sideSizes[1].times do |i|
+          idxBattler = (2 * i) + 1
+          next if @battle.battlers[idxBattler].shiny? \
+					|| !@battle.battlers[idxBattler].pokemon.hue? \
+					|| !@battle.battlers[idxBattler].pokemon.applicable_hue?
+          pbCommonAnimation("Shiny", @battle.battlers[idxBattler])
+        end
+      end
+    end
+		# Player pokémon animation
+    alias :pokemon_color_variants_pbSendOutBattlers :pbSendOutBattlers
+    def pbSendOutBattlers(sendOuts, startBattle = false)
+      pokemon_color_variants_pbSendOutBattlers(sendOuts, startBattle)
+      sendOuts.each do |b|
+        next if !@battle.showAnims || @battle.battlers[b[0]].shiny? \
+				|| !@battle.battlers[b[0]].pokemon.hue? \
+				|| !@battle.battlers[b[0]].pokemon.applicable_hue?
+        pbCommonAnimation("Shiny", @battle.battlers[b[0]])
+      end
+    end
+  end
 end
 
 #==============================================================================

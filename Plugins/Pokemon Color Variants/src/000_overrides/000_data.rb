@@ -9,40 +9,75 @@ class Color
 	def to_hex()
 		return sprintf("#%02x%02x%02x", red, green, blue)
 	end
+	# Convert a hex color to a RGBA
+	def self.hex_to_rgba(hex)
+		s = hex.strip.sub(/^#/,'')
+		return [
+			s[0,2].to_i(16),
+			s[2,2].to_i(16),
+			s[4,2].to_i(16),
+			(s.length == 8) ? s[6,2].to_i(16) : 255
+		] if [6,8].include?(s.length)
+		return [0,0,0,0]
+	end
 end
 
 #==============================================================================
 # Bitmap
 #==============================================================================
 class Bitmap
-
 	attr_reader :hue
-	
 	def hue=(hue)
 		@hue = 0 if @hue == nil
 		diff = hue - @hue
 		self.hue_change(diff)
 		@hue += diff
 	end
-
-	def palette_change(old_palette, new_palette)
-		return if old_palette == "" || old_palette == nil || new_palette == "" || new_palette == nil
+	def palette_change(old_palette, new_palette, ignore_alpha=true)
 		validate old_palette => String
 		validate new_palette => String
-		pixel = nil
-		_old = old_palette.tr("\t","").tr(" ","").split("\n")
-		_new = new_palette.tr("\t","").tr(" ","").split("\n")
-		_dict = {}
-		for i in 0..(_old.length-1)
-			_dict[_old[i]] = _new[i]
-		end
-		for x in 0..(self.width-1)
-			for y in 0..(self.height-1)
-				pixel = self.get_pixel(x,y).to_hex()
-				self.set_pixel(x,y,Color.from_hex(_dict[pixel])) if _dict.key?(pixel) && self.get_pixel(x,y).alpha > 0
+		before = old_palette.scan(/#?[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?/)
+		after = new_palette.scan(/#?[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?/)
+		# Map the colors
+		map = {}
+		for i in 0...([before.size(), after.size()].min())
+			og_color = Color.hex_to_rgba(before[i])
+			new_color = Color.hex_to_rgba(after[i])
+			if ignore_alpha
+				og_color.pop()
+				new_color.pop()
 			end
+			map[og_color] = new_color
 		end
+		data = self.raw_data.dup.force_encoding(Encoding::ASCII_8BIT)
+		# Iterate for every pixel
+		for i in 0...(data.bytesize/4)
+			idx = i * 4
+			r = data.getbyte(idx)
+			g = data.getbyte(idx+1)
+			b = data.getbyte(idx+2)
+			a = data.getbyte(idx+3)
+			current_pixel = ignore_alpha ? [r,g,b] : [r,g,b,a]
+			new_pixel = map[current_pixel]
+			next if !new_pixel
+			data.setbyte(idx, new_pixel[0])   # R
+			data.setbyte(idx+1, new_pixel[1]) # G
+			data.setbyte(idx+2, new_pixel[2]) # B
+			data.setbyte(idx+3, new_pixel[3]) if !ignore_alpha # A
+		end
+		self.raw_data = data
 	end
+end
+
+#==============================================================================
+# Cache
+#==============================================================================
+module RPG
+  module Cache
+    def self.removeKey(key)
+      @cache.delete(key)
+    end
+  end
 end
 
 #==============================================================================
@@ -79,12 +114,10 @@ class Pokemon
 	end
 	# Check if the hue is applicable to the pokémon
 	def applicable_hue?
-		if !shiny? && !super_shiny? && PokemonColorVariants::APPLY_TO_NORMAL
-			return true if !egg? || (egg? && PokemonColorVariants::APPLY_TO_EGG)
-		elsif shiny? && PokemonColorVariants::APPLY_TO_SHINY
-			return true if !egg? || (egg? && PokemonColorVariants::APPLY_TO_EGG)
-		elsif super_shiny? && PokemonColorVariants::APPLY_TO_SUPER_SHINY
-			return true if !egg? || (egg? && PokemonColorVariants::APPLY_TO_EGG)
+		if (!shiny? && !super_shiny? && PokemonColorVariants::APPLY_TO_NORMAL) \
+		|| (shiny? && PokemonColorVariants::APPLY_TO_SHINY) \
+		|| (super_shiny? && PokemonColorVariants::APPLY_TO_SUPER_SHINY)
+			return true if !egg? || PokemonColorVariants::APPLY_TO_EGG
 		end
 		return false
 	end
@@ -116,7 +149,7 @@ class Pokemon
 	end
 	# Check if the palette is applicable to the pokémon
 	def applicable_palette?
-		return applicable_hue?
+		return PokemonColorVariants::ENABLED_PALETTES && applicable_hue?
 	end
 end
 

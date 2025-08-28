@@ -1,5 +1,11 @@
 Name       = Pokemon Color Variants
-Version    = 1.3.0
+Version    = 1.4.0
 Essentials = 21.1
+
+Optional   = v21.1 Hotfixes, 1.0.9
+Optional   = Following Pokemon EX, 2.4
+Optional   = Visible Overworld Wild Encounters, 20.0.0.5
+Optional   = [DBK] Animated Pokémon System, 1.1.1
+
 Website    = github.com/MickTK/PE-Pokemon-Color-Variants
 Credits    = MickTK
